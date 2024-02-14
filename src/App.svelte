@@ -45,7 +45,7 @@
     evmAddresses.map((address) => {
       const existed = eth.find((e) => e.identity === address)
       if (existed) {
-        checked += `${address}: ${existed.amount}`
+        checked += `${address}: ${existed.amount}\n`
         total += Number(existed.amount)
       }
     })
@@ -53,7 +53,7 @@
     starknetAddresses.map((address) => {
       const existed = starknet.find((e) => e.identity.slice(-20) === address.slice(-20))
       if (existed) {
-        checked += `${address}: ${existed.amount}`
+        checked += `${address}: ${existed.amount}\n`
         total += Number(existed.amount)
       }
     })
@@ -61,7 +61,7 @@
     githubsUsernames.map((username) => {
       const existed = github.find((e) => e.identity === username)
       if (existed) {
-        checked += `${username}: ${existed.amount}`
+        checked += `${username}: ${existed.amount}\n`
         total += Number(existed.amount)
       }
     })
