@@ -1,5 +1,4 @@
 <script lang="ts">
-	import axios from 'axios'
 	import eth0 from './provisions-data/eth/eth-0.json'
 	import eth1 from './provisions-data/eth/eth-1.json'
 	import eth2 from './provisions-data/eth/eth-2.json'
@@ -20,27 +19,27 @@
 	import starknet6 from './provisions-data/starknet/starknet-6.json'
 
 	const eth = [
-		eth0.eligibles,
-		eth1.eligibles,
-		eth2.eligibles,
-		eth3.eligibles,
-		eth4.eligibles,
-		eth5.eligibles,
-		eth6.eligibles,
+		eth0,
+		eth1,
+		eth2,
+		eth3,
+		eth4,
+		eth5,
+		eth6,
 	].flat()
 	console.log(eth.length)
 
-	const github = [github0.eligibles, github1.eligibles].flat()
+	const github = [github0, github1].flat()
 	console.log(github.length)
 
 	const starknet = [
-		starknet0.eligibles,
-		starknet1.eligibles,
-		starknet2.eligibles,
-		starknet3.eligibles,
-		starknet4.eligibles,
-		starknet5.eligibles,
-		starknet6.eligibles,
+		starknet0,
+		starknet1,
+		starknet2,
+		starknet3,
+		starknet4,
+		starknet5,
+		starknet6,
 	].flat()
 	console.log(starknet.length)
 
@@ -70,14 +69,14 @@
 			.filter((i) => i.length > 0)
 
 		evmAddresses.map((address) => {
-			const existed = eth.find((e) => e.identity === address)
+			const existed = eth.find((e) => e.i === address)
 			if (existed) {
 				good.push(existed)
-				total += Number(existed.amount)
+				total += Number(existed.a)
 			} else {
 				bad.push({
-					identity: address,
-					amount: 0,
+					i: address,
+					a: 0,
 				})
 			}
 		})
@@ -85,28 +84,28 @@
 		starknetAddresses.map((address) => {
 			console.log(address)
 			const existed = starknet.find(
-				(e) => e.identity.slice(-20) === address.slice(-20)
+				(e) => e.i.slice(-20) === address.slice(-20)
 			)
 			if (existed) {
 				good.push(existed)
-				total += Number(existed.amount)
+				total += Number(existed.a)
 			} else {
 				bad.push({
-					identity: address,
-					amount: 0,
+					i: address,
+					a: 0,
 				})
 			}
 		})
 
 		githubsUsernames.map((username) => {
-			const existed = github.find((e) => e.identity === username)
+			const existed = github.find((e) => e.i === username)
 			if (existed) {
 				good.push(existed)
-				total += Number(existed.amount)
+				total += Number(existed.a)
 			} else {
 				bad.push({
-					identity: username,
-					amount: 0,
+					i: username,
+					a: 0,
 				})
 			}
 		})
@@ -168,10 +167,10 @@
 		<div>
 			<label for="good">Eligible ({good.length}):</label>
 			<table>
-				{#each good.sort((a, b) => b.amount - a.amount) as account}
+				{#each good.sort((a, b) => b.a - a.a) as account}
 					<tr>
-						<td>{account.identity}</td>
-						<td>{account.amount}</td>
+						<td>{account.i}</td>
+						<td>{account.a}</td>
 					</tr>
 				{/each}
 			</table>
@@ -192,7 +191,7 @@
 			<table>
 				{#each bad as account}
 					<tr>
-						<td>{account.identity}</td>
+						<td>{account.i}</td>
 					</tr>
 				{/each}
 			</table>
