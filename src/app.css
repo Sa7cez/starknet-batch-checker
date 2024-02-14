@@ -47,6 +47,10 @@ h1 {
 	text-align: center;
 }
 
+label {
+	font-weight: 500;
+}
+
 button {
 	border-radius: 8px;
 	border: 1px solid transparent;
@@ -64,6 +68,19 @@ button:hover {
 button:focus,
 button:focus-visible {
 	outline: 4px auto -webkit-focus-ring-color;
+}
+
+table {
+	margin: 1rem 0;
+	width: 100%;
+	border-collapse: collapse;
+	border-radius: 0.5rem;
+}
+
+table td {
+	border: 1px solid #707070;
+	padding: 0.5rem;
+	font-size: 0.875rem;
 }
 
 @media (prefers-color-scheme: light) {

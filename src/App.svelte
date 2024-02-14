@@ -48,8 +48,8 @@
 	let starknets: string = ''
 	let githubs: string = ''
 
-	let good = []
-	let bad = []
+	let good: any[] = []
+	let bad: any[] = []
 	let total = -1
 
 	const check = async () => {
@@ -72,10 +72,13 @@
 		evmAddresses.map((address) => {
 			const existed = eth.find((e) => e.identity === address)
 			if (existed) {
-				good.push(`${address}: ${existed.amount}`)
+				good.push(existed)
 				total += Number(existed.amount)
 			} else {
-				bad.push(`${address}`)
+				bad.push({
+					identity: address,
+					amount: 0,
+				})
 			}
 		})
 
@@ -85,20 +88,26 @@
 				(e) => e.identity.slice(-20) === address.slice(-20)
 			)
 			if (existed) {
-				good.push(`${address}: ${existed.amount}`)
+				good.push(existed)
 				total += Number(existed.amount)
 			} else {
-				bad.push(`${address}`)
+				bad.push({
+					identity: address,
+					amount: 0,
+				})
 			}
 		})
 
 		githubsUsernames.map((username) => {
 			const existed = github.find((e) => e.identity === username)
 			if (existed) {
-				good.push(`${username}: ${existed.amount}`)
+				good.push(existed)
 				total += Number(existed.amount)
 			} else {
-				bad.push(`${username} not eligable`)
+				bad.push({
+					identity: username,
+					amount: 0,
+				})
 			}
 		})
 	}
@@ -106,13 +115,15 @@
 
 <main>
 	<div style="text-align:left">
-		<p>
-			Database loading (<a
+		<label>
+			Database from StarkNet Repo (<a
+				target="_blank"
 				href="https://github.com/starknet-io/provisions-data/tree/main"
 				>source</a
 			>):
-		</p>
-		<ul>
+		</label>
+
+		<ul style="font-size: 0.875rem;">
 			<li>ETH: {eth.length} addressess</li>
 			<li>Github: {github.length} usernames</li>
 			<li>Starknet: {starknet.length} addresses</li>
@@ -150,35 +161,46 @@
 	</div>
 
 	<div>
-		<button on:click={check}>Batch Check Eligablity!</button>
+		<button on:click={check}>Batch Check Starknet Eligablity!</button>
 	</div>
 
 	{#if good.length > 0}
 		<div>
-			<label for="good">Eligible:</label>
-			<textarea id="good" placeholder="Results here" rows="10"
-				>{good.join('\n')}</textarea
-			>
+			<label for="good">Eligible ({good.length}):</label>
+			<table>
+				{#each good.sort((a, b) => b.amount - a.amount) as account}
+					<tr>
+						<td>{account.identity}</td>
+						<td>{account.amount}</td>
+					</tr>
+				{/each}
+			</table>
 		</div>
 	{/if}
 
 	{#if total >= 0}
 		<div>
-			<p style="font-weight: 600">Total: {total} STRK</p>
+			<p style="font-size: 1.25rem; font-weight: 600">
+				Total token: {total} STRK
+			</p>
 		</div>
 	{/if}
 
 	{#if bad.length > 0}
 		<div>
-			<label for="bad">Not eligible:</label>
-			<textarea id="bad" placeholder="Results here" rows="10"
-				>{bad.join('\n')}</textarea
-			>
+			<label for="bad">Not eligible ({bad.length}):</label>
+			<table>
+				{#each bad as account}
+					<tr>
+						<td>{account.identity}</td>
+					</tr>
+				{/each}
+			</table>
 		</div>
 	{/if}
 
 	<div style="padding: 3rem 0 0">
-		<a style="font-size:10px;" href="https://t.me/sa7cez" target="_blank"
+		<a style="font-size:10px;" href="https://t.me/salcez" target="_blank"
 			>Made by Salce</a
 		>
 	</div>
@@ -189,7 +211,11 @@
 	textarea,
 	button {
 		width: 100%;
+		max-width: 100%;
 		margin: 0.5rem auto 1rem;
+	}
+	textarea {
+		font-size: 0.875rem;
 	}
 	label {
 		display: block;
